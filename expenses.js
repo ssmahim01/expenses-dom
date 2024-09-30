@@ -3,22 +3,39 @@
 // Global variables.
 
 const calculate = document.getElementById('calculate');
-let count = 0;
 
 calculate.addEventListener('click', function(){
-    count += 1;
     let incomeInput = parseFloat(document.getElementById('income').value);
     let softwareCost = parseFloat(document.getElementById('software').value);
     let coursesCost = parseFloat(document.getElementById('courses').value);
     let internetCost = parseFloat(document.getElementById('internet').value);
 
-        const sumExpenses = softwareCost + coursesCost + internetCost;
+    if(incomeInput <= 0){
+        document.getElementById('income-error').classList.remove('hidden');
+        return;
+    }else if(softwareCost <= 0){
+        document.getElementById('software-error').classList.remove('hidden');
+        return;
+    }else if(coursesCost <= 0){
+        document.getElementById('courses-error').classList.remove('hidden');
+        return;
+    }else if(internetCost <= 0){
+        document.getElementById('internet-error').classList.remove('hidden');
+        return;
+    }
 
+    document.getElementById('income-error').classList.add('hidden');
+    document.getElementById('software-error').classList.add('hidden');
+    document.getElementById('courses-error').classList.add('hidden');
+    document.getElementById('internet-error').classList.add('hidden');
+    
+    const sumExpenses = softwareCost + coursesCost + internetCost;
+    
         if(sumExpenses > incomeInput){
-            document.getElementById('income-error').classList.remove('hidden');
             document.getElementById('logic-error').classList.remove('hidden');
             return;
         }
+        document.getElementById('logic-error').classList.add('hidden');
 
             const lastAmount = incomeInput - sumExpenses;
                     
@@ -42,15 +59,14 @@ calculate.addEventListener('click', function(){
             const div = document.createElement('div');
             div.className = "bg-white p-3 rounded-md border-l-2 border-indigo-500";
 
-                div.innerHTML += `
-                <p class="text-xs text-gray-500 font-medium>Serial: ${count}</p>
-                <p class="text-xs text-gray-500 font-medium>${new Date().toLocaleDateString()}</p>
-                <p class="text-lg text-gray-500 font-bold>Income: ${incomeInput.toFixed(2)}</p>
+            div.innerHTML += `
+                <p class="text-xs text-gray-500 font-medium>Date: ${new Date().toLocaleDateString()}</p>
+                 <p class="text-lg text-gray-500 font-bold>Income: ${incomeInput.toFixed(2)}</p>
+                 <p class="text-xs text-gray-500 font-medium>Balance: ${lastAmount.toFixed(2)}</p>
                 <p class="text-xs text-gray-500 font-medium>Expenses: ${sumExpenses.toFixed(2)}</p>
-                <p class="text-xs text-gray-500 font-medium>Balance: ${lastAmount.toFixed(2)}</p>
                 `
                 const historyList = document.getElementById('history-list');
-            historyList.appendChild(div);
+            historyList.insertBefore(div, historyList.firstChild);
 });
 
 // Saving Button
@@ -63,6 +79,13 @@ savingBtn.addEventListener('click', function(){
     const softwareCost = parseFloat(document.getElementById('software').value); 
     const coursesCost = parseFloat(document.getElementById('courses').value);
     const internetCost = parseFloat(document.getElementById('internet').value);
+
+    if(isNaN(savingInput) || savingInput <= 0){
+        document.getElementById('savings-error').classList.remove('hidden');
+        return;
+    }
+
+    document.getElementById('savings-error').classList.add('hidden');
 
     const sumExpenses = softwareCost + coursesCost + internetCost;
     const lastAmount = incomeInput - sumExpenses;
